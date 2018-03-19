@@ -1,4 +1,5 @@
 <?php
+
 namespace WH\LibBundle\Filter;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
@@ -9,16 +10,25 @@ use Doctrine\Common\Annotations\AnnotationReader;
 
 final class SearchFilter extends AbstractFilter
 {
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
-    {
+    protected function filterProperty(
+        string $property,
+        $value,
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        string $operationName = null
+    ) {
         if ($property === 'search') {
-            $this->logger->info('Search for: ' . $value);
+            $this->logger->info('Search for: '.$value);
         } else {
             return;
         }
 
         $reader = new AnnotationReader();
-        $annotation = $reader->getClassAnnotation(new \ReflectionClass(new $resourceClass), 'WH\\LibBundle\\Filter\\SearchAnnotation');
+        $annotation = $reader->getClassAnnotation(
+            new \ReflectionClass(new $resourceClass),
+            'WH\\LibBundle\\Filter\\SearchAnnotation'
+        );
 
         if (!$annotation) {
             throw new \HttpInvalidParamException('No Search implemented.');
@@ -27,26 +37,26 @@ final class SearchFilter extends AbstractFilter
         $parameterName = $queryNameGenerator->generateParameterName($property);
         $search = [];
 
-        foreach ($annotation->fields as $field)
-        {
+        foreach ($annotation->fields as $field) {
             $search[] = "o.{$field} LIKE :{$parameterName}";
         }
 
         $queryBuilder->andWhere(implode(' OR ', $search));
-        $queryBuilder->setParameter($parameterName, '%' . $value . '%');
+        $queryBuilder->setParameter($parameterName, '%'.$value.'%');
     }
 
     /**
      * @param string $resourceClass
+     *
      * @return array
      */
     public function getDescription(string $resourceClass): array
     {
         $description['search'] = [
             'property' => 'search',
-            'type' => 'string',
+            'type'     => 'string',
             'required' => false,
-            'swagger' => ['description' => 'Searchfilter'],
+            'swagger'  => ['description' => 'Searchfilter'],
         ];
 
         return $description;

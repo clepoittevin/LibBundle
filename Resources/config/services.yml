@@ -15,6 +15,6 @@ services:
         class: WH\LibBundle\Services\FormErrorCollector
 
     wh.searchfilter:
-        class : 'WH\CmsBundle\Filter\SearchFilter'
+        class : 'WH\LibBundle\Filter\SearchFilter'
         arguments: [ '@doctrine', '@request_stack', '@?logger' ]
         tags: [ 'api_platform.filter' ]
