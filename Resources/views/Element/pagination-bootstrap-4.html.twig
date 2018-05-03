@@ -107,7 +107,7 @@
             </li>
             {% if nextPages is defined %}
                 {% for nextPage in nextPages %}
-                    <li>
+                    <li class="page-item">
                         <a class="page-link" href="{{ pagination['url'] ~ '?page=' ~ nextPage }}">{{ nextPage }}</a>
                     </li>
                 {% endfor %}
