@@ -18,7 +18,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('LibBundle');
-        $rootNode = $treeBuilder->root('wh_lib');
+        //$rootNode = $treeBuilder->root('wh_lib');
+        $rootNode = method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('wh_lib');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
